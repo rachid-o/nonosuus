@@ -5,12 +5,6 @@ type SquareProps = {
   onClick: () => void;
 };
 
-// const Square: React.FC<SquareProps> = ({ value, onClick }) => (
-//   <button style={{ width: "50px", height: "50px" }} onClick={onClick}>
-//     {value}
-//   </button>
-// );
-
 const Square: React.FC<SquareProps> = ({ value, onClick }) => (
   <button
     style={{
@@ -25,14 +19,14 @@ const Square: React.FC<SquareProps> = ({ value, onClick }) => (
 );
 
 const Board: React.FC = () => {
-  const [squares, setSquares] = useState<Array<string | null>>(
-    Array(25).fill(null)
+  const [squares, setSquares] = useState<Array<Array<string | null>>>(
+    Array(5).fill(Array(5).fill(null))
   );
 
-  const handleClick = (index: number) => {
-    console.log("clicked:", index);
-    const newSquares = squares.slice();
-    newSquares[index] = squares[index] === "X" ? null : "X";
+  const handleClick = (row: number, col: number) => {
+    console.debug("clicked:", row, col);
+    const newSquares = squares.map((r) => r.slice());
+    newSquares[row][col] = newSquares[row][col] === "X" ? null : "X";
     setSquares(newSquares);
   };
 
@@ -45,41 +39,29 @@ const Board: React.FC = () => {
   )[0];
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", width: "300px" }}>
-      <div style={{ width: "50px" }}></div>
-
-      {columnHeaders.map((header, index) => (
-        <div key={index} style={{ width: "50px", textAlign: "center" }}>
-          {header}
+    <div>
+      <div style={{ display: "flex" }}>
+        <div style={{ width: "50px" }}></div>
+        {columnHeaders.map((header, index) => (
+          <div key={index} style={{ width: "50px", textAlign: "center" }}>
+            {header}
+          </div>
+        ))}
+      </div>
+      {squares.map((row, rowIndex) => (
+        <div key={rowIndex} style={{ display: "flex" }}>
+          <div style={{ width: "50px", textAlign: "center" }}>
+            {rowHeaders[rowIndex]}
+          </div>
+          {row.map((square, colIndex) => (
+            <Square
+              key={colIndex}
+              value={square}
+              onClick={() => handleClick(rowIndex, colIndex)}
+            />
+          ))}
         </div>
       ))}
-      {/* {squares.map((square, index) => (
-        <Square key={index} value={square} onClick={() => handleClick(index)} />
-      ))} */}
-
-      {squares.map((square, index) => {
-        if (index % 5 === 0) {
-          return (
-            <>
-              <div style={{ width: "50px", textAlign: "center" }}>
-                {rowHeaders[index / 5]}
-              </div>
-              <Square
-                key={index}
-                value={square}
-                onClick={() => handleClick(index)}
-              />
-            </>
-          );
-        }
-        return (
-          <Square
-            key={index}
-            value={square}
-            onClick={() => handleClick(index)}
-          />
-        );
-      })}
     </div>
   );
 };
