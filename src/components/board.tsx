@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import BoardState, { CellState } from "./board-state";
 
 type SquareProps = {
-  value: string | null;
+  value: CellState;
   onClick: () => void;
 };
 
@@ -10,53 +11,41 @@ const Square: React.FC<SquareProps> = ({ value, onClick }) => (
     style={{
       width: "50px",
       height: "50px",
-      backgroundColor: value ? "black" : "white",
+      backgroundColor: value === CellState.Filled ? "black" : "white",
     }}
     onClick={onClick}
   >
-    {value}
+    {value === CellState.Marked ? "X" : null}
   </button>
 );
 
 const Board: React.FC = () => {
-  const [squares, setSquares] = useState<Array<Array<string | null>>>(
-    Array(5).fill(Array(5).fill(null))
-  );
-
+  const [boardState, setBoardState] = useState<BoardState>(new BoardState());
   const handleClick = (row: number, col: number) => {
-    console.debug("clicked:", row, col);
-    const newSquares = squares.map((r) => r.slice());
-    newSquares[row][col] = newSquares[row][col] === "X" ? null : "X";
-    setSquares(newSquares);
+    // boardState = boardState.handleClick(row, col);
+    var newState = boardState.handleClick(row, col);
+    setBoardState(newState);
   };
-
-  const columnHeaders = useState(() =>
-    Array.from({ length: 5 }, () => Math.floor(Math.random() * 5 + 1))
-  )[0];
-
-  const rowHeaders = useState(() =>
-    Array.from({ length: 5 }, () => Math.floor(Math.random() * 5 + 1))
-  )[0];
 
   return (
     <div>
       <div style={{ display: "flex" }}>
         <div style={{ width: "50px" }}></div>
-        {columnHeaders.map((header, index) => (
+        {boardState.getColumnHeaders().map((header, index) => (
           <div key={index} style={{ width: "50px", textAlign: "center" }}>
             {header}
           </div>
         ))}
       </div>
-      {squares.map((row, rowIndex) => (
+      {boardState.getCells().map((row, rowIndex) => (
         <div key={rowIndex} style={{ display: "flex" }}>
           <div style={{ width: "50px", textAlign: "center" }}>
-            {rowHeaders[rowIndex]}
+            {boardState.getRowHeaders()[rowIndex]}
           </div>
-          {row.map((square, colIndex) => (
+          {row.map((cell, colIndex) => (
             <Square
               key={colIndex}
-              value={square}
+              value={cell}
               onClick={() => handleClick(rowIndex, colIndex)}
             />
           ))}
