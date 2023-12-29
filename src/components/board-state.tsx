@@ -4,46 +4,35 @@ export enum CellState {
   Marked,
 }
 
-const width = 3;
-const height = 2;
+export type Position = {
+  row: number;
+  col: number;
+};
 
 class BoardState {
   cells: Array<Array<CellState>>;
+  solution: Array<Position>;
 
-  constructor(cells?: Array<Array<CellState>>) {
-    // console.debug("BoardState constructor, cells:", cells);
-    if (cells) {
-      this.cells = cells;
-    } else {
-      this.cells = Array.from({ length: height }, () =>
-        Array(width).fill(CellState.Empty)
-      );
-    }
+  constructor(cells: Array<Array<CellState>>, solution: Array<Position>) {
+    this.solution = solution;
+    this.cells = cells;
   }
 
-  handleClick(row: number, col: number) {
-    console.info("BoardState handle click:", row, col);
+  handleClick(pos: Position) {
+    // console.info("BoardState handle click:", pos);
     const newCells = this.cells.map((r) => r.slice());
 
-    newCells[row][col] = this.getNextState(newCells[row][col]);
+    if (newCells[pos.row][pos.col] === CellState.Empty) {
+      if (this.solution.some((p) => p.row === pos.row && p.col === pos.col)) {
+        newCells[pos.row][pos.col] = CellState.Filled;
+      } else {
+        console.warn("Wrong click, no solution at:", pos);
+        newCells[pos.row][pos.col] = CellState.Marked;
+      }
+    }
 
     this.cells = newCells;
-    return new BoardState(newCells);
-  }
-
-  getCells(): Array<Array<CellState>> {
-    return this.cells;
-  }
-
-  getColumnHeaders(): number[] {
-    return Array.from({ length: width }, () =>
-      Math.floor(Math.random() * 5 + 1)
-    );
-  }
-  getRowHeaders(): number[] {
-    return Array.from({ length: height }, () =>
-      Math.floor(Math.random() * 5 + 1)
-    );
+    return new BoardState(newCells, this.solution);
   }
 
   private getNextState(state: CellState): CellState {
@@ -55,6 +44,25 @@ class BoardState {
       case CellState.Marked:
         return CellState.Empty;
     }
+  }
+
+  getCells(): Array<Array<CellState>> {
+    return this.cells;
+  }
+
+  getColumnHeaders(): number[] {
+    // count the number of filled solutions in this column
+    return Array.from({ length: this.cells.length }, (_, colNr) => {
+      return Array.from(this.solution).filter((pos) => pos.col === colNr)
+        .length;
+    });
+  }
+  getRowHeaders(): number[] {
+    // count the number of filled solutions in this row
+    return Array.from({ length: this.cells[0].length }, (_, rowNr) => {
+      return Array.from(this.solution).filter((pos) => pos.row === rowNr)
+        .length;
+    });
   }
 }
 

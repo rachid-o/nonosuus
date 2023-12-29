@@ -1,5 +1,17 @@
-import React, { useEffect, useState } from "react";
-import BoardState, { CellState } from "./board-state";
+import React, { useState } from "react";
+import BoardState, { CellState, Position } from "./board-state";
+import { l, minus, plus } from "./solutions";
+
+const width = 3;
+const height = 3;
+
+const cells = Array.from({ length: height }, () =>
+  Array(width).fill(CellState.Empty)
+);
+
+const solution = minus;
+// const solution = l;
+// const solution = plus;
 
 type SquareProps = {
   value: CellState;
@@ -20,10 +32,11 @@ const Square: React.FC<SquareProps> = ({ value, onClick }) => (
 );
 
 const Board: React.FC = () => {
-  const [boardState, setBoardState] = useState<BoardState>(new BoardState());
+  const [boardState, setBoardState] = useState<BoardState>(
+    new BoardState(cells, solution)
+  );
   const handleClick = (row: number, col: number) => {
-    // boardState = boardState.handleClick(row, col);
-    var newState = boardState.handleClick(row, col);
+    var newState = boardState.handleClick({ row, col });
     setBoardState(newState);
   };
 
