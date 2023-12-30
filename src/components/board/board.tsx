@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import BoardState, { CellState, Position } from "./board-state";
-import { l, minus, plus } from "./solutions";
+import BoardState, { CellState, Position } from "../board-state";
+import { duck, l, minus, plus } from "../solutions";
 
-const width = 3;
-const height = 3;
+const width = 9;
+const height = 9;
 
 const cells = Array.from({ length: height }, () =>
   Array(width).fill(CellState.Empty)
 );
 
-const solution = minus;
+const solution = duck;
 // const solution = l;
 // const solution = plus;
 
@@ -21,8 +21,8 @@ type SquareProps = {
 const Square: React.FC<SquareProps> = ({ value, onClick }) => (
   <button
     style={{
-      width: "50px",
-      height: "50px",
+      width: "60px",
+      height: "60px",
       backgroundColor: value === CellState.Filled ? "black" : "white",
     }}
     onClick={onClick}
@@ -43,16 +43,16 @@ const Board: React.FC = () => {
   return (
     <div>
       <div style={{ display: "flex" }}>
-        <div style={{ width: "50px" }}></div>
+        <div style={{ width: "60px" }}></div>
         {boardState.getColumnHeaders().map((header, index) => (
-          <div key={index} style={{ width: "50px", textAlign: "center" }}>
+          <div key={index} style={{ width: "60px", textAlign: "center" }}>
             {header}
           </div>
         ))}
       </div>
       {boardState.getCells().map((row, rowIndex) => (
         <div key={rowIndex} style={{ display: "flex" }}>
-          <div style={{ width: "50px", textAlign: "center" }}>
+          <div style={{ width: "60px", textAlign: "center" }}>
             {boardState.getRowHeaders()[rowIndex]}
           </div>
           {row.map((cell, colIndex) => (

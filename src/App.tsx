@@ -1,14 +1,14 @@
 import "./App.css";
-import Board from "./components/board";
-// import Counter from "./components/counter";
+import { Outlet } from "react-router-dom";
 
+// class App extends React.Component {
 function App() {
   return (
-    <div className="App">
-      <div style={{ paddingLeft: "30px", paddingTop: "30px" }}>
-        <Board />
+    <>
+      <div className="App">
+        <Outlet />
       </div>
-    </div>
+    </>
   );
 }
 

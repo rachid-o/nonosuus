@@ -10,4 +10,4 @@ Start the test runner:
 `npm test`
 
 Run as PWA:
-`npx serve -s build`
+`npm run build &&  npx serve -s build -l 3001`

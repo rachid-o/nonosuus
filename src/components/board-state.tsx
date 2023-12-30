@@ -4,10 +4,10 @@ export enum CellState {
   Marked,
 }
 
-export type Position = {
+export interface Position {
   row: number;
   col: number;
-};
+}
 
 class BoardState {
   cells: Array<Array<CellState>>;
@@ -35,31 +35,24 @@ class BoardState {
     return new BoardState(newCells, this.solution);
   }
 
-  private getNextState(state: CellState): CellState {
-    switch (state) {
-      case CellState.Empty:
-        return CellState.Filled;
-      case CellState.Filled:
-        return CellState.Marked;
-      case CellState.Marked:
-        return CellState.Empty;
-    }
-  }
-
   getCells(): Array<Array<CellState>> {
     return this.cells;
   }
 
   getColumnHeaders(): number[] {
+    // TODO: Calc the filled connected cells and return an array for each column
+
     // count the number of filled solutions in this column
-    return Array.from({ length: this.cells.length }, (_, colNr) => {
+    return Array.from({ length: this.cells[0].length }, (_, colNr) => {
       return Array.from(this.solution).filter((pos) => pos.col === colNr)
         .length;
     });
   }
+
   getRowHeaders(): number[] {
+    // TODO: Calc the filled connected cells and return an array for each column
     // count the number of filled solutions in this row
-    return Array.from({ length: this.cells[0].length }, (_, rowNr) => {
+    return Array.from({ length: this.cells.length }, (_, rowNr) => {
       return Array.from(this.solution).filter((pos) => pos.row === rowNr)
         .length;
     });
