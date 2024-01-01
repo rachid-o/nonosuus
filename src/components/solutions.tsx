@@ -14,6 +14,11 @@ export const minus: Array<Position> = [
   { row: 1, col: 2 },
 ];
 
+export const divide: Array<Position> = [
+  { row: 0, col: 1 },
+  { row: 2, col: 1 },
+];
+
 export const l: Array<Position> = [
   { row: 0, col: 1 },
   { row: 1, col: 1 },

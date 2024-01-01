@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import BoardState, { CellState, Position } from "../board-state";
-import { duck, l, minus, plus } from "../solutions";
+import { divide, duck, l, minus, plus } from "../solutions";
 
+// const width = 3;
+// const height = 3;
 const width = 9;
 const height = 9;
+
+const solution = duck;
+// const solution = divide;
+// const solution = l;
+// const solution = plus;
 
 const cells = Array.from({ length: height }, () =>
   Array(width).fill(CellState.Empty)
 );
-
-const solution = duck;
-// const solution = l;
-// const solution = plus;
 
 type SquareProps = {
   value: CellState;
@@ -21,6 +24,9 @@ type SquareProps = {
 const Square: React.FC<SquareProps> = ({ value, onClick }) => (
   <button
     style={{
+      // display: "flex",
+      // alignItems: "center",
+      // justifyContent: "center",
       width: "60px",
       height: "60px",
       backgroundColor: value === CellState.Filled ? "black" : "white",
@@ -44,16 +50,26 @@ const Board: React.FC = () => {
     <div>
       <div style={{ display: "flex" }}>
         <div style={{ width: "60px" }}></div>
-        {boardState.getColumnHeaders().map((header, index) => (
+        {boardState.getColumnHeaders().map((headers, index) => (
           <div key={index} style={{ width: "60px", textAlign: "center" }}>
-            {header}
+            {headers.map((header, index) => (
+              <div key={index}>{header}</div>
+            ))}
           </div>
         ))}
       </div>
       {boardState.getCells().map((row, rowIndex) => (
         <div key={rowIndex} style={{ display: "flex" }}>
-          <div style={{ width: "60px", textAlign: "center" }}>
-            {boardState.getRowHeaders()[rowIndex]}
+          <div
+            style={{
+              display: "flex",
+              width: "60px",
+              textAlign: "center",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {boardState.getRowHeaders()[rowIndex].join("  ")}
           </div>
           {row.map((cell, colIndex) => (
             <Square
