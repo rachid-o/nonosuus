@@ -1,58 +1,61 @@
+import { Grid, Position } from "../common/grid";
+
 export enum CellState {
   Empty,
   Filled,
   Marked,
-}
-
-export interface Position {
-  row: number;
-  col: number;
+  MarkedWrong,
 }
 
 class BoardState {
-  cells: Array<Array<CellState>>;
-  solution: Array<Position>;
+  grid: Grid<CellState>;
+  solution: Grid<boolean>;
 
-  constructor(cells: Array<Array<CellState>>, solution: Array<Position>) {
+  constructor(cells: Grid<CellState>, solution: Grid<boolean>) {
     this.solution = solution;
-    this.cells = cells;
+    this.grid = cells;
   }
 
-  handleClick(pos: Position) {
-    // console.info("BoardState handle click:", pos);
-    const newCells = this.cells.map((r) => r.slice());
-
-    if (newCells[pos.row][pos.col] === CellState.Empty) {
-      if (this.solutionContains(pos)) {
-        newCells[pos.row][pos.col] = CellState.Filled;
-      } else {
-        console.warn("Wrong click, no solution at:", pos);
-        newCells[pos.row][pos.col] = CellState.Marked;
-      }
+  handleClick(pos: Position, expectedState: CellState) {
+    // console.debug( "BoardState expect state of cell: " + pos + "to be: " + expectedState);
+    const currentState = this.grid.getValue(pos);
+    if (currentState === CellState.Filled) {
+      console.debug("Already filled, do nothing");
+      return new BoardState(this.grid, this.solution);
     }
 
-    this.cells = newCells;
-    return new BoardState(newCells, this.solution);
-  }
-
-  private solutionContains(pos: Position) {
-    return this.solution.some((p) => p.row === pos.row && p.col === pos.col);
+    switch (expectedState) {
+      case CellState.Marked:
+        if (currentState === CellState.Empty) {
+          this.grid.update(pos, CellState.Marked);
+        } else if (currentState === CellState.Marked) {
+          this.grid.update(pos, CellState.Empty);
+        }
+        break;
+      case CellState.Filled:
+        if (this.solution.getValue(pos)) {
+          this.grid.update(pos, CellState.Filled);
+        } else {
+          this.grid.update(pos, CellState.MarkedWrong);
+        }
+        break;
+      default:
+      // Do Nothing
+    }
+    return new BoardState(this.grid, this.solution);
   }
 
   getCells(): Array<Array<CellState>> {
-    return this.cells;
+    return this.grid.getCells();
   }
 
   getColumnHeaders(): number[][] {
-    // TODO: Calc the filled connected cells and return an array for each column
-
-    // count the number of filled solutions in this column
     let headers = [];
-    for (let col = 0; col < this.cells[0].length; col++) {
+    for (let col = 0; col < this.grid.getWidth(); col++) {
       let count = 0;
       let columnCounts = [];
-      for (let row = 0; row < this.cells.length; row++) {
-        if (this.solutionContains({ row, col })) {
+      for (let row = 0; row < this.grid.getHeight(); row++) {
+        if (this.solution.getValue({ row, col })) {
           count++;
         } else if (count > 0) {
           columnCounts.push(count);
@@ -72,11 +75,11 @@ class BoardState {
 
   getRowHeaders(): number[][] {
     let headers = [];
-    for (let row = 0; row < this.cells.length; row++) {
+    for (let row = 0; row < this.grid.getHeight(); row++) {
       let count = 0;
       let rowCounts = [];
-      for (let col = 0; col < this.cells[0].length; col++) {
-        if (this.solutionContains({ row, col })) {
+      for (let col = 0; col < this.grid.getWidth(); col++) {
+        if (this.solution.getValue({ row, col })) {
           count++;
         } else if (count > 0) {
           rowCounts.push(count);

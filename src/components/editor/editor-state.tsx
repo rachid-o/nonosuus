@@ -1,13 +1,5 @@
-export enum CellState {
-  Empty,
-  Filled,
-  Marked,
-}
-
-export type Position = {
-  row: number;
-  col: number;
-};
+import { Position } from "../../common/grid";
+import { CellState } from "../board-state";
 
 class EditorState {
   cells: Array<Array<CellState>>;
@@ -27,26 +19,12 @@ class EditorState {
       newCells[pos.row][pos.col] = CellState.Filled;
     }
 
-    // print all cells that are CellState.Filled
-
     this.cells = newCells;
     this.printState();
     return new EditorState(newCells, this.solution);
   }
 
   private printState() {
-    // const state = this.cells
-    //   .map((row, rowIndex) => {
-    //     return row
-    //       .map((cell, colIndex) => {
-    //         if (cell === CellState.Filled) {
-    //           return { row: rowIndex, col: colIndex };
-    //         }
-    //       })
-    //       .filter((cell) => cell !== undefined);
-    //   })
-    //   .filter((row) => row.length > 0);
-
     // convert all cells that are CellState.Filled to an Array<Position>
     let filledPositions: Array<Position> = [];
     this.cells.forEach((row, rowIndex) => {
@@ -56,13 +34,8 @@ class EditorState {
         }
       });
     });
-    console.log("filledPositions: ", filledPositions);
+    // console.log("filledPositions: ", filledPositions);
     console.log("filledPositions JSON: ", JSON.stringify(filledPositions));
-    // console.log(
-    //   "Current state:",
-    //   state
-    // .map((row) => JSON.stringify(row))
-    // );
   }
 
   getCells(): Array<Array<CellState>> {
@@ -71,14 +44,12 @@ class EditorState {
 
   getColumnHeaders(): number[] {
     return Array.from({ length: this.cells[0].length }, (_, colNr) => {
-      return Array.from(this.solution).filter((pos) => pos.col === colNr)
-        .length;
+      return Array.from(this.solution).filter((pos) => pos.col === colNr).length;
     });
   }
   getRowHeaders(): number[] {
     return Array.from({ length: this.cells.length }, (_, rowNr) => {
-      return Array.from(this.solution).filter((pos) => pos.row === rowNr)
-        .length;
+      return Array.from(this.solution).filter((pos) => pos.row === rowNr).length;
     });
   }
 }

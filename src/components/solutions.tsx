@@ -1,4 +1,4 @@
-import { Position } from "./board-state";
+import { Position } from "../common/grid";
 
 export const plus: Array<Position> = [
   { row: 1, col: 1 },
@@ -12,6 +12,17 @@ export const minus: Array<Position> = [
   { row: 1, col: 1 },
   { row: 1, col: 0 },
   { row: 1, col: 2 },
+];
+
+export const dot_1: Array<Position> = [{ row: 0, col: 0 }];
+
+export const dot_2_wide: Array<Position> = [
+  { row: 0, col: 0 },
+  { row: 0, col: 1 },
+];
+export const dot_2_high: Array<Position> = [
+  { row: 0, col: 0 },
+  { row: 1, col: 0 },
 ];
 
 export const divide: Array<Position> = [

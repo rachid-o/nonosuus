@@ -7,12 +7,22 @@ const HomePage: React.FC<Props> = (props: Props) => {
   return (
     <div>
       <h1>No, no...</h1>
-      <div style={{ paddingLeft: "30px", paddingTop: "30px" }}>
-        <Board />
-      </div>
-      <br />
+      <Board />
       <br />
       <Link to="/editor">Create your own</Link>
+      <br />
+      <br />
+      <footer
+        style={{
+          fontSize: "12px",
+          bottom: 0,
+          width: "100%",
+          textAlign: "center",
+          padding: "20px",
+        }}
+      >
+        Build: {process.env.REACT_APP_VERSION}
+      </footer>
     </div>
   );
 };

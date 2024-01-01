@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import EditorState, { CellState, Position } from "./editor-state";
+import EditorState from "./editor-state";
+import { Position } from "../../common/grid";
+import { CellState } from "../board-state";
 
 const width = 8;
 const height = 9;
 
-const cells = Array.from({ length: height }, () =>
-  Array(width).fill(CellState.Empty)
-);
+const cells = Array.from({ length: height }, () => Array(width).fill(CellState.Empty));
 
 const solution: Array<Position> = [];
 for (let row = 0; row < height; row++) {
@@ -34,9 +34,7 @@ const Square: React.FC<SquareProps> = ({ value, onClick }) => (
 );
 
 const Editor: React.FC = () => {
-  const [editorState, setEditorState] = useState<EditorState>(
-    new EditorState(cells, solution)
-  );
+  const [editorState, setEditorState] = useState<EditorState>(new EditorState(cells, solution));
   const handleClick = (row: number, col: number) => {
     var newState = editorState.handleClick({ row, col });
     setEditorState(newState);
@@ -58,11 +56,7 @@ const Editor: React.FC = () => {
             {editorState.getRowHeaders()[rowIndex]}
           </div>
           {row.map((cell, colIndex) => (
-            <Square
-              key={colIndex}
-              value={cell}
-              onClick={() => handleClick(rowIndex, colIndex)}
-            />
+            <Square key={colIndex} value={cell} onClick={() => handleClick(rowIndex, colIndex)} />
           ))}
         </div>
       ))}
