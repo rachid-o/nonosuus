@@ -35,7 +35,8 @@ class EditorState {
       });
     });
     // console.log("filledPositions: ", filledPositions);
-    console.log("filledPositions JSON: ", JSON.stringify(filledPositions));
+    // console.log("filledPositions JSON: ", JSON.stringify(filledPositions));
+    console.log("Filled cells: \n", JSON.stringify(filledPositions).replaceAll('"', ""));
   }
 
   getCells(): Array<Array<CellState>> {

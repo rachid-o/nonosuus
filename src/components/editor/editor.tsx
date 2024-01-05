@@ -3,8 +3,8 @@ import EditorState from "./editor-state";
 import { Position } from "../../common/grid";
 import { CellState } from "../board-state";
 
-const width = 8;
-const height = 9;
+const width = 10;
+const height = 10;
 
 const cells = Array.from({ length: height }, () => Array(width).fill(CellState.Empty));
 

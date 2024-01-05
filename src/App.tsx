@@ -1,8 +1,7 @@
 import "./App.css";
 import { Outlet } from "react-router-dom";
 
-// class App extends React.Component {
-function App() {
+const App: React.FC = () => {
   return (
     <>
       <div className="App">
@@ -10,6 +9,6 @@ function App() {
       </div>
     </>
   );
-}
+};
 
 export default App;

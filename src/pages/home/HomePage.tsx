@@ -5,24 +5,45 @@ interface Props {}
 
 const HomePage: React.FC<Props> = (props: Props) => {
   return (
-    <div>
-      <h1>No, no...</h1>
-      <Board />
-      <br />
-      <Link to="/editor">Create your own</Link>
-      <br />
-      <br />
-      <footer
-        style={{
-          fontSize: "12px",
-          bottom: 0,
-          width: "100%",
-          textAlign: "center",
-          padding: "20px",
-        }}
-      >
-        Build: {process.env.REACT_APP_VERSION}
-      </footer>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "98vh",
+        maxHeight: "98vh",
+        margin: "1vw",
+        paddingTop: "2vw",
+        overflow: "hidden",
+      }}
+    >
+      <div style={{ flex: 1 }}>
+        <Board />
+        <br />
+        <br />
+        <Link
+          to="/editor"
+          style={{
+            textDecoration: "none",
+            color: "blue",
+            fontSize: "2vh",
+          }}
+        >
+          Create your own
+        </Link>
+      </div>
+      <div>
+        <footer
+          style={{
+            fontSize: "2vh",
+            bottom: 0,
+            width: "100%",
+            textAlign: "center",
+            padding: "1vh",
+          }}
+        >
+          Build: {process.env.REACT_APP_VERSION}
+        </footer>
+      </div>
     </div>
   );
 };
