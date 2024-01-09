@@ -1,4 +1,6 @@
+import { isEqual } from "lodash";
 import { Grid, Position } from "../common/grid";
+// import { isEqual } from "lodash";
 
 export enum CellState {
   Empty,
@@ -43,6 +45,10 @@ class BoardState {
       // Do Nothing
     }
     return new BoardState(this.grid, this.solution);
+  }
+
+  isFinished(): boolean {
+    return isEqual(this.grid.getPositions(CellState.Filled), this.solution.getPositions(true));
   }
 
   getCells(): Array<Array<CellState>> {

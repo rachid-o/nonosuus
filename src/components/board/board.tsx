@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import BoardState, { CellState } from "../board-state";
-import { heart, love } from "../puzzles/solutions";
+import { heart, love, minus } from "../puzzles/solutions";
 import { Grid } from "../../common/grid";
 import Switch from "react-switch";
+import { Link } from "react-router-dom";
 
-const solutionPositions = love;
+const solutionPositions = minus;
 // const solutionPositions = heart;
+// const solutionPositions = love;
 
 let solution = Grid.createSolution(solutionPositions);
 
@@ -68,10 +70,15 @@ const Board: React.FC = () => {
   const toggleFillOrMark = () => {
     setFillOrMark(fillOrMark === CellState.Marked ? CellState.Filled : CellState.Marked);
   };
+  const [isLevelFinished, setIsLevelFinished] = useState<boolean>(false);
 
   const handleClick = (row: number, col: number) => {
     var newState = boardState.handleClick({ row, col }, fillOrMark);
     setBoardState(newState);
+    if (newState.isFinished()) {
+      setIsLevelFinished(true);
+      // TODO Disable the board
+    }
   };
 
   return (
@@ -84,6 +91,25 @@ const Board: React.FC = () => {
         marginBottom: "3vh",
       }}
     >
+      <div
+        style={{
+          visibility: isLevelFinished ? "visible" : "hidden",
+          marginBottom: "10vw",
+          fontSize: "4vw",
+        }}
+      >
+        Level Finished! <br />
+        <Link
+          to="/level/2"
+          style={{
+            textDecoration: "none",
+            color: "blue",
+          }}
+        >
+          Click here to continue
+        </Link>
+      </div>
+
       <div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div

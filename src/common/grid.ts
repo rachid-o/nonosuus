@@ -21,6 +21,19 @@ export class Grid<T> {
   getCells(): T[][] {
     return this.cells;
   }
+  getPositions(value: T): Array<Position> {
+    let positions = new Array<Position>();
+
+    this.cells.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        if (cell === value) {
+          positions.push({ row: rowIndex, col: colIndex });
+        }
+      });
+    });
+
+    return positions;
+  }
 
   getHeight(): number {
     return this.cells.length;
@@ -32,14 +45,8 @@ export class Grid<T> {
     return `${this.getWidth()} x ${this.getHeight()}`;
   }
 
-  static createGrid<T>(
-    width: number,
-    height: number,
-    defaultValue: T
-  ): Grid<T> {
-    let cells: T[][] = Array.from({ length: height }, () =>
-      Array(width).fill(defaultValue)
-    );
+  static createGrid<T>(width: number, height: number, defaultValue: T): Grid<T> {
+    let cells: T[][] = Array.from({ length: height }, () => Array(width).fill(defaultValue));
 
     return new Grid(cells);
   }
@@ -48,9 +55,7 @@ export class Grid<T> {
     let width = positions.reduce((max, pos) => Math.max(max, pos.col), 0) + 1;
     let heigth = positions.reduce((max, pos) => Math.max(max, pos.row), 0) + 1;
 
-    let cells: boolean[][] = Array.from({ length: heigth }, () =>
-      Array(width).fill(false)
-    );
+    let cells: boolean[][] = Array.from({ length: heigth }, () => Array(width).fill(false));
     let grid = new Grid(cells);
 
     positions.forEach((pos) => grid.update(pos, true));
