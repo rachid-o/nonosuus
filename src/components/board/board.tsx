@@ -8,8 +8,8 @@ import { Link, useParams } from "react-router-dom";
 export interface Puzzle {
   solution: Array<Position>;
 }
-// const puzzleList = [minus, plus, divide, heart, love];
-const puzzleList = [minus, plus];
+const puzzleList = [minus, plus, divide, heart, love];
+// const puzzleList = [minus, love, plus];
 
 const puzzles: { [key: string]: Puzzle } = Object.fromEntries(
   puzzleList.map((puzzle, index) => [(index + 1).toString(), { solution: puzzle }])
@@ -113,7 +113,7 @@ const Board: React.FC = () => {
       style={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        // alignItems: "center",
         justifyContent: "center",
         marginBottom: "3vh",
       }}
@@ -123,7 +123,7 @@ const Board: React.FC = () => {
       <div
         style={{
           visibility: isLevelFinished ? "visible" : "hidden",
-          marginBottom: "10vw",
+          marginBottom: "5vw",
           fontSize: "4vw",
         }}
       >
@@ -139,8 +139,25 @@ const Board: React.FC = () => {
         </Link>
       </div>
 
-      <div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          position: "relative",
+          // border: "1px dashed blue",
+          // width: "75vw",
+          // height: "75vw",
+          // maxWidth: "75vw",
+          // maxHeight: "75vw",
+          marginBottom: "10vw",
+          // overflow: "auto",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            // border: "2px dashed orange"
+          }}
+        >
           <div
             style={{
               display: "grid",
@@ -148,11 +165,16 @@ const Board: React.FC = () => {
               gridTemplateRows: `repeat(${boardState.grid.getHeight() + 1}, 1fr)`,
               gridAutoRows: "1fr",
               // TODO: in landscape mode, the heigth (vh) should be used instead of width
+              // width: "100%",
+              // height: "100%",
+              // width: "60vw",
+              // height: "60vw",
               width: "75vw",
               height: "75vw",
               maxWidth: "75vw",
               maxHeight: "75vw",
-              marginBottom: "14vw",
+              // overflow: "auto",
+              // height: "75vw",
             }}
           >
             <div key="-1" style={{ textAlign: "center" }}></div>
@@ -212,9 +234,10 @@ const Board: React.FC = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            marginTop: "4vh",
+            marginTop: "12vh",
           }}
         >
+          <br />
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div
               style={{
@@ -235,13 +258,13 @@ const Board: React.FC = () => {
             onColor="#D3D3D3"
             offHandleColor="#e0e0e0"
             onHandleColor="#000000"
-            handleDiameter={60}
+            handleDiameter={30}
             uncheckedIcon={false}
             checkedIcon={false}
-            boxShadow="0vw 1vw 2vw rgba(0, 0, 0, 0.6)"
-            activeBoxShadow="0vw 0vw 1vw 3vw rgba(0, 0, 0, 0.2)"
-            height={40}
-            width={96}
+            boxShadow="0vw 1vw 1vw rgba(0, 0, 0, 0.6)"
+            activeBoxShadow="0vw 0vw 1vw 1vw rgba(0, 0, 0, 0.2)"
+            height={20}
+            width={48}
           />
           <div
             style={{ marginLeft: "2vw", color: filledColor, fontSize: "6vw" }}

@@ -31,14 +31,12 @@ const App: React.FC = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          // minHeight: "98vh",
           minHeight: "98vh",
-          maxHeight: "98vh",
-          height: "95vh",
+          maxHeight: "90vh",
           margin: "1vw",
           paddingTop: "2vw",
           paddingBottom: "2vw",
-          // overflow: "hidden",
+          overflow: "hidden",
         }}
       >
         <div>{location.pathname !== "/" && <BackButton />}</div>
