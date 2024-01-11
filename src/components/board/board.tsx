@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import BoardState, { CellState } from "../board-state";
-import { heart, love, minus } from "../puzzles/solutions";
-import { Grid } from "../../common/grid";
+import { divide, duck, heart, love, minus, plus } from "../puzzles/solutions";
+import { Grid, Position } from "../../common/grid";
 import Switch from "react-switch";
 import { Link, useParams } from "react-router-dom";
 
-const solutionPositions = minus;
-// const solutionPositions = heart;
-// const solutionPositions = love;
+export interface Puzzle {
+  solution: Array<Position>;
+}
+// const puzzleList = [minus, plus, divide, heart, love];
+const puzzleList = [minus, plus];
 
-let solution = Grid.createSolution(solutionPositions);
-
-let boardGrid = Grid.createGrid(solution.getWidth(), solution.getHeight(), CellState.Empty);
+const puzzles: { [key: string]: Puzzle } = Object.fromEntries(
+  puzzleList.map((puzzle, index) => [(index + 1).toString(), { solution: puzzle }])
+);
 
 const filledColor = "#444444";
 const markedColor = "lightgray";
@@ -64,6 +66,18 @@ const Square: React.FC<SquareProps> = ({ state, position, onClick }) => {
   );
 };
 
+function getBoardState(puzzleId: string): BoardState {
+  if (!puzzles[puzzleId]) {
+    console.info("Puzzle not found: ", puzzleId);
+    return new BoardState(Grid.createGrid(1, 1, CellState.Empty), Grid.createGrid(1, 1, false));
+  }
+  let puzzle = puzzles[puzzleId].solution;
+  let solution = Grid.createSolution(puzzle);
+  let boardGrid = Grid.createGrid(solution.getWidth(), solution.getHeight(), CellState.Empty);
+
+  return new BoardState(boardGrid, solution);
+}
+
 const Board: React.FC = () => {
   const { puzzleId } = useParams();
   if (puzzleId === undefined || puzzleId.trim() === "") {
@@ -72,12 +86,14 @@ const Board: React.FC = () => {
   const nextPuzzleLink = "/puzzle/" + (parseInt(puzzleId) + 1);
 
   useEffect(() => {
-    console.log("Reset board for puzzleId: ", puzzleId);
-    // setBoardState(initialBoardState);
     setIsLevelFinished(false);
+    setBoardState(getBoardState(puzzleId));
   }, [puzzleId]);
 
-  const [boardState, setBoardState] = useState<BoardState>(new BoardState(boardGrid, solution));
+  // const [boardState, setBoardState] = useState<BoardState>(new BoardState(boardGrid, solution));
+  let initialBoardState = getBoardState(puzzleId);
+
+  const [boardState, setBoardState] = useState<BoardState>(initialBoardState);
   const [fillOrMark, setFillOrMark] = useState<CellState>(CellState.Filled);
   const toggleFillOrMark = () => {
     setFillOrMark(fillOrMark === CellState.Marked ? CellState.Filled : CellState.Marked);
@@ -89,7 +105,6 @@ const Board: React.FC = () => {
     setBoardState(newState);
     if (newState.isFinished()) {
       setIsLevelFinished(true);
-      // TODO Disable the board
     }
   };
 
@@ -129,8 +144,8 @@ const Board: React.FC = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: `repeat(${solution.getWidth() + 1}, 1fr)`,
-              gridTemplateRows: `repeat(${solution.getHeight() + 1}, 1fr)`,
+              gridTemplateColumns: `repeat(${boardState.grid.getWidth() + 1}, 1fr)`,
+              gridTemplateRows: `repeat(${boardState.grid.getHeight() + 1}, 1fr)`,
               gridAutoRows: "1fr",
               // TODO: in landscape mode, the heigth (vh) should be used instead of width
               width: "75vw",
