@@ -12,14 +12,25 @@ const HomePage: React.FC<Props> = (props: Props) => {
         minHeight: "98vh",
         maxHeight: "98vh",
         margin: "1vw",
-        paddingTop: "2vw",
+        paddingTop: "10vw",
         overflow: "hidden",
       }}
     >
+      <h1 style={{ fontSize: "6vh" }}>Welcome</h1>
+      <br /> <br />
       <div style={{ flex: 1 }}>
-        <Board />
-        <br />
-        <br />
+        <Link
+          to="/puzzle/1"
+          style={{
+            textDecoration: "none",
+            color: "blue",
+            fontSize: "4vh",
+          }}
+        >
+          Start playing puzzles
+        </Link>
+        <br /> <br /> <br /> <br />
+        <br /> <br /> <br /> <br />
         <Link
           to="/editor"
           style={{
@@ -28,21 +39,8 @@ const HomePage: React.FC<Props> = (props: Props) => {
             fontSize: "2vh",
           }}
         >
-          Create your own
+          Create your own puzzle
         </Link>
-      </div>
-      <div>
-        <footer
-          style={{
-            fontSize: "2vh",
-            bottom: 0,
-            width: "100%",
-            textAlign: "center",
-            padding: "1vh",
-          }}
-        >
-          Build: {process.env.REACT_APP_VERSION}
-        </footer>
       </div>
     </div>
   );

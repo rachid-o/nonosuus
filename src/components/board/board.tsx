@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BoardState, { CellState } from "../board-state";
 import { heart, love, minus } from "../puzzles/solutions";
 import { Grid } from "../../common/grid";
 import Switch from "react-switch";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const solutionPositions = minus;
 // const solutionPositions = heart;
@@ -65,6 +65,18 @@ const Square: React.FC<SquareProps> = ({ state, position, onClick }) => {
 };
 
 const Board: React.FC = () => {
+  const { puzzleId } = useParams();
+  if (puzzleId === undefined || puzzleId.trim() === "") {
+    throw new Error("puzzleId is undefined");
+  }
+  const nextPuzzleLink = "/puzzle/" + (parseInt(puzzleId) + 1);
+
+  useEffect(() => {
+    console.log("Reset board for puzzleId: ", puzzleId);
+    // setBoardState(initialBoardState);
+    setIsLevelFinished(false);
+  }, [puzzleId]);
+
   const [boardState, setBoardState] = useState<BoardState>(new BoardState(boardGrid, solution));
   const [fillOrMark, setFillOrMark] = useState<CellState>(CellState.Filled);
   const toggleFillOrMark = () => {
@@ -91,6 +103,8 @@ const Board: React.FC = () => {
         marginBottom: "3vh",
       }}
     >
+      <h1 style={{ fontSize: "6vh" }}>Puzzle {puzzleId}</h1>
+
       <div
         style={{
           visibility: isLevelFinished ? "visible" : "hidden",
@@ -98,15 +112,15 @@ const Board: React.FC = () => {
           fontSize: "4vw",
         }}
       >
-        Level Finished! <br />
+        Puzzle Finished! <br />
         <Link
-          to="/level/2"
+          to={nextPuzzleLink}
           style={{
             textDecoration: "none",
             color: "blue",
           }}
         >
-          Click here to continue
+          Click here to open the next one
         </Link>
       </div>
 
