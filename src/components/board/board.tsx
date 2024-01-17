@@ -3,13 +3,13 @@ import BoardState, { CellState } from "../board-state";
 import { divide, duck, heart, love, minus, plus } from "../puzzles/solutions";
 import { Grid, Position } from "../../common/grid";
 import Switch from "react-switch";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export interface Puzzle {
   solution: Array<Position>;
 }
 const puzzleList = [minus, plus, divide, heart, love];
-// const puzzleList = [minus, love, plus];
+// const puzzleList = [minus, plus];
 
 const puzzles: { [key: string]: Puzzle } = Object.fromEntries(
   puzzleList.map((puzzle, index) => [(index + 1).toString(), { solution: puzzle }])
@@ -80,6 +80,8 @@ function getBoardState(puzzleId: string): BoardState {
 
 const Board: React.FC = () => {
   const { puzzleId } = useParams();
+  const navigate = useNavigate();
+
   if (puzzleId === undefined || puzzleId.trim() === "") {
     throw new Error("puzzleId is undefined");
   }
@@ -87,11 +89,20 @@ const Board: React.FC = () => {
 
   useEffect(() => {
     setIsLevelFinished(false);
-    setBoardState(getBoardState(puzzleId));
-  }, [puzzleId]);
+    let initialBoardState = getBoardState(puzzleId);
+    if (initialBoardState.grid.getHeight() === 1 && initialBoardState.grid.getWidth() === 1) {
+      console.info("Puzzle not found: ", puzzleId);
+      navigate("/end");
+    }
+    setBoardState(initialBoardState);
+  }, [puzzleId, navigate]);
 
   // const [boardState, setBoardState] = useState<BoardState>(new BoardState(boardGrid, solution));
   let initialBoardState = getBoardState(puzzleId);
+  // if (initialBoardState.grid.getHeight() === 1 && initialBoardState.grid.getWidth() === 1) {
+  //   console.info("Puzzle not found: ", puzzleId);
+  //   navigate("/end");
+  // }
 
   const [boardState, setBoardState] = useState<BoardState>(initialBoardState);
   const [fillOrMark, setFillOrMark] = useState<CellState>(CellState.Filled);

@@ -1,5 +1,5 @@
 import "./App.css";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 // import { Outlet, useLocation } from "react-router-dom";
 
 const BackButton: React.FC = () => {
@@ -37,8 +37,15 @@ const App: React.FC = () => {
           paddingTop: "2vw",
           paddingBottom: "2vw",
           overflow: "hidden",
+          position: "relative",
         }}
       >
+        {location.pathname !== "/" && (
+          <Link to="/" style={{ position: "absolute", top: 0, right: 0, fontSize: "25px" }}>
+            Home
+          </Link>
+        )}
+
         <div>{location.pathname !== "/" && <BackButton />}</div>
         <div>
           <Outlet />

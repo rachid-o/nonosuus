@@ -3,6 +3,7 @@ import App from "../App";
 import HomePage from "../pages/home/HomePage";
 import EditorPage from "../pages/editor/EditorPage";
 import PuzzlePage from "../pages/puzzle/PuzzlePage";
+import EndPage from "../pages/end/EndPage";
 
 export const router = createHashRouter([
   {
@@ -16,6 +17,10 @@ export const router = createHashRouter([
       {
         path: "puzzle/:puzzleId",
         element: <PuzzlePage />,
+      },
+      {
+        path: "end",
+        element: <EndPage />,
       },
       {
         path: "editor",
